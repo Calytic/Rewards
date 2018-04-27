@@ -25,7 +25,7 @@ namespace Oxide.Plugins
 
         public List<string> Options_itemList = new List<string> { "NPCReward_Enabled", "Permission_Multiplier_Enabled", "ActivityReward_Enabled", "WelcomeMoney_Enabled", "WeaponMultiplier_Enabled", "DistanceMultiplier_Enabled", "UseEconomicsPlugin", "UseServerRewardsPlugin", "UseFriendsPlugin", "UseClansPlugin", "Economincs_TakeMoneyFromVictim", "ServerRewards_TakeMoneyFromVictim", "PrintToConsole", "HappyHour_Enabled" };
         public List<string> Multipliers_itemList = new List<string> { "LR300", "HuntingBow", "Crossbow", "AssaultRifle", "PumpShotgun", "SemiAutomaticRifle", "Thompson", "CustomSMG", "BoltActionRifle", "TimedExplosiveCharge", "M249", "EokaPistol", "Revolver", "WaterpipeShotgun", "SemiAutomaticPistol", "DoubleBarrelShotgun", "SatchelCharge", "distance_50", "distance_100", "distance_200", "distance_300", "distance_400", "HappyHourMultiplier", "M92Pistol", "MP5A4", "RocketLauncher", "BeancanGrenade", "F1Grenade", "Machete", "Longsword", "Mace", "SalvagedCleaver", "SalvagedSword", "StoneSpear", "WoodenSpear" };
-        public List<string> Rewards_itemList = new List<string> { "human", "bear", "wolf", "chicken", "horse", "boar", "stag", "helicopter", "autoturret", "ActivityRewardRate_minutes", "ActivityReward", "WelcomeMoney", "HappyHour_BeginHour", "HappyHour_DurationInHours", "HappyHour_EndHour", "NPCKill_Reward" };
+        public List<string> Rewards_itemList = new List<string> { "human", "bear", "wolf", "chicken", "horse", "boar", "stag", "helicopter", "autoturret", "ActivityRewardRate_minutes", "ActivityReward", "WelcomeMoney", "HappyHour_BeginHour", "HappyHour_EndHour", "NPCKill_Reward" };
         RewardRates rewardrates = new RewardRates ();
         Options options = new Options ();
         Multipliers multipliers = new Multipliers ();
@@ -108,7 +108,6 @@ namespace Oxide.Plugins
                 ActivityReward = 25,
                 WelcomeMoney = 250,
                 HappyHour_BeginHour = 20,
-                HappyHour_DurationInHours = 2,
                 HappyHour_EndHour = 23,
                 NPCKill_Reward = 50
             };
@@ -251,7 +250,6 @@ namespace Oxide.Plugins
                 rewardrates.WelcomeMoney = Convert.ToDouble (temp ["WelcomeMoney"]);
                 rewardrates.wolf = Convert.ToDouble (temp ["wolf"]);
                 rewardrates.HappyHour_BeginHour = Convert.ToDouble (temp ["HappyHour_BeginHour"]);
-                rewardrates.HappyHour_DurationInHours = Convert.ToDouble (temp ["HappyHour_DurationInHours"]);
                 rewardrates.HappyHour_EndHour = Convert.ToDouble (temp ["HappyHour_EndHour"]);
                 rewardrates.NPCKill_Reward = Convert.ToDouble (temp ["NPCKill_Reward"]);
 
@@ -638,7 +636,6 @@ namespace Oxide.Plugins
             public double ActivityReward { get; set; }
             public double WelcomeMoney { get; set; }
             public double HappyHour_BeginHour { get; set; }
-            public double HappyHour_DurationInHours { get; set; }
             public double HappyHour_EndHour { get; set; }
             public double NPCKill_Reward { get; set; }
             public double GetItemByString (string itemName)
@@ -670,8 +667,6 @@ namespace Oxide.Plugins
                     return WelcomeMoney;
                 case "HappyHour_BeginHour":
                     return HappyHour_BeginHour;
-                case "HappyHour_DurationInHours":
-                    return HappyHour_DurationInHours;
                 case "HappyHour_EndHour":
                     return HappyHour_EndHour;
                 case "NPCKill_Reward":
