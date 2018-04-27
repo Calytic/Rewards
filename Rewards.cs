@@ -362,14 +362,15 @@ namespace Oxide.Plugins
                         }
                     }
                     if (options.HappyHour_Enabled) {
+                        var gameTime = GameTime ();
                         if (!HappyHourActive) {
-                            if (GameTime () >= rewardrates.HappyHour_BeginHour) {
+                            if (gameTime >= rewardrates.HappyHour_BeginHour) {
                                 HappyHourActive = true;
                                 Puts ("Happy hour started. Ending at " + rewardrates.HappyHour_EndHour);
                                 BroadcastMessage (Lang ("HappyHourStart"), Lang ("Prefix"));
                             }
                         } else {
-                            if (GameTime () > rewardrates.HappyHour_EndHour) {
+                            if (gameTime > rewardrates.HappyHour_EndHour || gameTime < rewardrates.HappyHour_BeginHour) {
                                 HappyHourActive = false;
                                 Puts ("Happy hour ended");
                                 BroadcastMessage (Lang ("HappyHourEnd"), Lang ("Prefix"));
