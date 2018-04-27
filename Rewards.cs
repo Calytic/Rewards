@@ -6,7 +6,7 @@ using Oxide.Core;
 
 namespace Oxide.Plugins
 {
-    [Info ("Rewards", "Tarek", "1.3.14")]
+    [Info ("Rewards", "Tarek", "1.3.2")]
     [Description ("Rewards players for activities using Economic and/or ServerRewards")]
     public class Rewards : RustPlugin
     {
@@ -23,7 +23,7 @@ namespace Oxide.Plugins
 
         StoredData storedData;
 
-        public List<string> Options_itemList = new List<string> { "NPCReward_Enabled", "VIPMultiplier_Enabled", "ActivityReward_Enabled", "WelcomeMoney_Enabled", "WeaponMultiplier_Enabled", "DistanceMultiplier_Enabled", "UseEconomicsPlugin", "UseServerRewardsPlugin", "UseFriendsPlugin", "UseClansPlugin", "Economincs_TakeMoneyFromVictim", "ServerRewards_TakeMoneyFromVictim", "PrintToConsole", "HappyHour_Enabled" };
+        public List<string> Options_itemList = new List<string> { "NPCReward_Enabled", "Permission_Multiplier_Enabled", "ActivityReward_Enabled", "WelcomeMoney_Enabled", "WeaponMultiplier_Enabled", "DistanceMultiplier_Enabled", "UseEconomicsPlugin", "UseServerRewardsPlugin", "UseFriendsPlugin", "UseClansPlugin", "Economincs_TakeMoneyFromVictim", "ServerRewards_TakeMoneyFromVictim", "PrintToConsole", "HappyHour_Enabled" };
         public List<string> Multipliers_itemList = new List<string> { "LR300", "HuntingBow", "Crossbow", "AssaultRifle", "PumpShotgun", "SemiAutomaticRifle", "Thompson", "CustomSMG", "BoltActionRifle", "TimedExplosiveCharge", "M249", "EokaPistol", "Revolver", "WaterpipeShotgun", "SemiAutomaticPistol", "DoubleBarrelShotgun", "SatchelCharge", "distance_50", "distance_100", "distance_200", "distance_300", "distance_400", "HappyHourMultiplier", "M92Pistol", "MP5A4", "RocketLauncher", "BeancanGrenade", "F1Grenade", "Machete", "Longsword", "Mace", "SalvagedCleaver", "SalvagedSword", "StoneSpear", "WoodenSpear" };
         public List<string> Rewards_itemList = new List<string> { "human", "bear", "wolf", "chicken", "horse", "boar", "stag", "helicopter", "autoturret", "ActivityRewardRate_minutes", "ActivityReward", "WelcomeMoney", "HappyHour_BeginHour", "HappyHour_DurationInHours", "HappyHour_EndHour", "NPCKill_Reward" };
         RewardRates rewardrates = new RewardRates ();
@@ -173,7 +173,7 @@ namespace Oxide.Plugins
                 DistanceMultiplier_Enabled = true,
                 PrintToConsole = true,
                 HappyHour_Enabled = true,
-                VIPMultiplier_Enabled = false,
+                Permission_Multiplier_Enabled = false,
                 NPCReward_Enabled = false
             };
         }
@@ -267,7 +267,7 @@ namespace Oxide.Plugins
                 options.WeaponMultiplier_Enabled = (bool)temp2 ["WeaponMultiplier_Enabled"];
                 options.WelcomeMoney_Enabled = (bool)temp2 ["WelcomeMoney_Enabled"];
                 options.PrintToConsole = (bool)temp2 ["PrintToConsole"];
-                options.VIPMultiplier_Enabled = (bool)temp2 ["VIPMultiplier_Enabled"];
+                options.Permission_Multiplier_Enabled = (bool)temp2 ["Permission_Multiplier_Enabled"];
                 options.NPCReward_Enabled = (bool)temp2 ["NPCReward_Enabled"];
                 options.HappyHour_Enabled = (bool)temp2 ["HappyHour_Enabled"];
 
@@ -419,7 +419,7 @@ namespace Oxide.Plugins
                 multiplier += multipliers.GetWeaponM (weapon) * (HappyHourActive ? multipliers.HappyHourMultiplier : 1);
             }
 
-            if (options.VIPMultiplier_Enabled) {
+            if (options.Permission_Multiplier_Enabled) {
                 var permissions = multipliers.Permissions.Where (x => permission.UserHasPermission (attacker.UserIDString, x.Key)).ToArray ();
                 multiplier += (permissions.Any ()
                         ? permissions.OrderByDescending (x => x.Value).First ().Value
@@ -702,7 +702,6 @@ namespace Oxide.Plugins
             public double distance_300 { get; set; }
             public double distance_400 { get; set; }
             public double HappyHourMultiplier { get; set; }
-            public double CustomPermissionMultiplier { get; set; }
             public double LR300 { get; set; }
             public double M92Pistol { get; set; }
             public double MP5A4 { get; set; }
@@ -848,8 +847,6 @@ namespace Oxide.Plugins
                     return distance_400;
                 case "HappyHourMultiplier":
                     return HappyHourMultiplier;
-                case "CustomPermissionMultiplier":
-                    return CustomPermissionMultiplier;
                 case "LR300":
                     return LR300;
                 case "M92 Pistol":
@@ -889,7 +886,7 @@ namespace Oxide.Plugins
             public bool WeaponMultiplier_Enabled { get; set; }
             public bool DistanceMultiplier_Enabled { get; set; }
             public bool HappyHour_Enabled { get; set; }
-            public bool VIPMultiplier_Enabled { get; set; }
+            public bool Permission_Multiplier_Enabled { get; set; }
             public bool UseEconomicsPlugin { get; set; }
             public bool UseServerRewardsPlugin { get; set; }
             public bool UseFriendsPlugin { get; set; }
@@ -897,7 +894,6 @@ namespace Oxide.Plugins
             public bool Economincs_TakeMoneyFromVictim { get; set; }
             public bool ServerRewards_TakeMoneyFromVictim { get; set; }
             public bool PrintToConsole { get; set; }
-            public bool CustomPermissionMultiplier_Enabled { get; set; }
             public bool NPCReward_Enabled { get; set; }
             public bool GetItemByString (string itemName)
             {
@@ -926,8 +922,8 @@ namespace Oxide.Plugins
                     return PrintToConsole;
                 case "HappyHour_Enabled":
                     return HappyHour_Enabled;
-                case "VIPMultiplier_Enabled":
-                    return VIPMultiplier_Enabled;
+                case "Permission_Multiplier_Enabled":
+                    return Permission_Multiplier_Enabled;
                 case "NPCReward_Enabled":
                     return NPCReward_Enabled;
                 default:
