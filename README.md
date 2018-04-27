@@ -43,7 +43,7 @@ All multipliers are configurable from the config file.
 
 If more than one multiplier is enabled, the total multiplier will be the product of all multipliers, which is then multiplied by the normal reward.
 
-**VIP_Multipliers** give users/groups with the `rewards.vip` permission an extra multiplier *(default x2)*
+**Permission_Multipliers** give users/groups with the `rewards.vip` permission an extra multiplier *(default x2)*
 
 **Example:** I kill a horse *(reward = 15)* with a Assault Rifle *(multiplier = 1.5)* from 162 meters ***(multiplier = 1.3)* in Happy Hour *(multiplier = 2)*, I get 15x *(1.5 x 1.3 x 2)* = **58.50**
 
