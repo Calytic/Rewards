@@ -18,11 +18,11 @@ namespace Oxide.Plugins
         [PluginReference]
         Plugin Economics, ServerRewards, Friends, Clans, HumanNPC;
 
-        private bool IsFriendsLoaded = false;
-        private bool IsEconomicsLoaded = false;
-        private bool IsServerRewardsLoaded = false;
-        private bool IsClansLoaded = false;
-        private bool IsNPCLoaded = false;
+        bool IsFriendsLoaded = false;
+        bool IsEconomicsLoaded = false;
+        bool IsServerRewardsLoaded = false;
+        bool IsClansLoaded = false;
+        bool IsNPCLoaded = false;
 
         private bool HappyHourActive = false;
         TimeSpan hhstart; TimeSpan hhend; TimeSpan hhnow;
@@ -35,14 +35,14 @@ namespace Oxide.Plugins
         public List<string> Rewards_itemList = new List<string> { "human", "bear", "wolf", "chicken", "horse", "boar", "stag", "helicopter", "autoturret", "ActivityRewardRate_minutes", "ActivityReward", "WelcomeMoney", "HappyHour_BeginHour", "HappyHour_DurationInHours", "HappyHour_EndHour", "NPCKill_Reward" };
         //public List<string> Strings_itemList = new List<string> { "CustomPermissionName" };
         //private Strings strings = new Strings();
-        private Rewards_Version rewardsversion = new Rewards_Version();
-        private RewardRates rewardrates = new RewardRates();
-        private Options options = new Options();
-        private Multipliers multipliers = new Multipliers();
+        Rewards_Version rewardsversion = new Rewards_Version();
+        RewardRates rewardrates = new RewardRates();
+        Options options = new Options();
+        Multipliers multipliers = new Multipliers();
 
-        private Dictionary<BasePlayer, int> LastReward = new Dictionary<BasePlayer, int>();
+        Dictionary<BasePlayer, int> LastReward = new Dictionary<BasePlayer, int>();
 
-        private void OnServerInitialized()
+        void OnServerInitialized()
         {
             if (options.UseEconomicsPlugin && Economics != null)
                 IsEconomicsLoaded = true;
@@ -101,13 +101,13 @@ namespace Oxide.Plugins
             }, this);
         }
 
-        private void SaveData()
+        void SaveData()
         {
             Interface.Oxide.DataFileSystem.WriteObject<StoredData>("Rewards", storedData);
             Puts("Data saved");
         }
 
-        private void SetDefaultConfigValues()
+        void SetDefaultConfigValues()
         {
             //str = new Strings
             //{
@@ -460,7 +460,11 @@ namespace Oxide.Plugins
             if (options.DistanceMultiplier_Enabled || options.WeaponMultiplier_Enabled)
                 totalmultiplier = (options.DistanceMultiplier_Enabled ? multipliers.GetDistanceM(victim.Distance2D(info?.Initiator?.ToPlayer())) : 1) * (options.WeaponMultiplier_Enabled ? multipliers.GetWeaponM(info?.Weapon?.GetItem()?.info?.displayName?.english) : 1) * (HappyHourActive ? multipliers.HappyHourMultiplier : 1) * ((options.VIPMultiplier_Enabled && HasPerm(info?.Initiator?.ToPlayer(), "rewards.vip")) ? multipliers.VIPMultiplier : 1) * ((HasPerm(info?.Initiator?.ToPlayer(), "rewards.vip")) ? multipliers.VIPMultiplier : 1);
 
-            if (victim.ToPlayer() != null)
+            if (options.NPCReward_Enabled && victim is NPCPlayer)
+            {
+                RewardPlayer(info?.Initiator?.ToPlayer(), rewardrates.NPCKill_Reward, totalmultiplier, (victim as NPCPlayer).displayName);
+            }
+            else if (victim.ToPlayer() != null)
             {
                 if (victim.ToPlayer().userID <= 2147483647)
                     return;
