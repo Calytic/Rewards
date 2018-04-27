@@ -412,16 +412,20 @@ namespace Oxide.Plugins
             double multiplier = 1;
 
             if (options.DistanceMultiplier_Enabled) {
-                multiplier += multipliers.GetDistanceM (victim.Distance2D (attacker));
+                multiplier *= multipliers.GetDistanceM (victim.Distance2D (attacker));
             }
 
             if (options.WeaponMultiplier_Enabled) {
-                multiplier += multipliers.GetWeaponM (weapon) * (HappyHourActive ? multipliers.HappyHourMultiplier : 1);
+                multiplier *= multipliers.GetWeaponM (weapon);
+            }
+
+            if (HappyHourActive) {
+                multiplier *= multipliers.HappyHourMultiplier;
             }
 
             if (options.Permission_Multiplier_Enabled) {
                 var permissions = multipliers.Permissions.Where (x => permission.UserHasPermission (attacker.UserIDString, x.Key)).ToArray ();
-                multiplier += (permissions.Any ()
+                multiplier *= (permissions.Any ()
                         ? permissions.OrderByDescending (x => x.Value).First ().Value
                         : 1);
             }
